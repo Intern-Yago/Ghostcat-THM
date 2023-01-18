@@ -1,0 +1,13 @@
+# Nmap 7.92 scan initiated Wed Jan 18 15:07:30 2023 as: nmap -oN nmap/first_scan -sV -T4 10.10.88.147
+Nmap scan report for 10.10.88.147
+Host is up (0.35s latency).
+Not shown: 996 closed tcp ports (reset)
+PORT     STATE SERVICE    VERSION
+22/tcp   open  ssh        OpenSSH 7.2p2 Ubuntu 4ubuntu2.8 (Ubuntu Linux; protocol 2.0)
+53/tcp   open  tcpwrapped
+8009/tcp open  ajp13      Apache Jserv (Protocol v1.3)
+8080/tcp open  http       Apache Tomcat 9.0.30
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Wed Jan 18 15:08:08 2023 -- 1 IP address (1 host up) scanned in 37.51 seconds

