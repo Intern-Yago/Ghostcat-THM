@@ -86,3 +86,14 @@ export TERM=xterm
 Agora como root vamos até o diretório do root e capturamos a segunda flag
 cat /root/root.txt
 > THM{Z1P_1S_FAKE}
+--------------------------------------------------------------------------------
+GTFOBins - GTFOBins é uma lista selecionada de binários Unix que podem ser usados ​​para contornar as restrições de segurança locais em sistemas mal configurados.
+
+AJP - AJP (Apache Jserv Protocol) é basicamente um protocolo binário que permite reverter solicitações de proxy de um FE Web Server para um BE Application Server, propagando efetivamente todas as informações necessárias para que o fluxo Req-Res continue com sucesso. Freqüentemente, o AJP é usado para balancear a carga usando políticas de sticky-session: graças aos dados de cabeçalho transferidos, o FE Web Server pode balancear a carga sobre as contrapartes do BE fazendo uso de módulos específicos (como, mod_jk).
+AJP é usado principalmente porque:
+é mais eficiente do que qualquer troca HTTP,
+é integrado com módulos de proxy reverso amplamente usados ​​(ou seja, mod_jk, mod_proxy),
+A implementação do Tomcat fornece um rico conjunto de APIs que são protocolos transversais: os dados HTTP(s) são propagados de forma contínua e podem ser recuperados com chamadas API simples (canonical getXYX(), muito eficaz e imediato), então é como trabalhar com HTTP em um velocidade mais alta.
+Definitivamente, eu diria que é uma solução comprovada com quase 20 anos de maturidade: é usada com sucesso em ambientes de produção.
+
+PGP - O PGP (abreviação de Pretty Good Privacy, ou Muito Boa Privacidade) é um programa de criptografia de chave pública e privada altamente seguro e utilizado para proteção de conteúdo enviado por correio eletrônico.
