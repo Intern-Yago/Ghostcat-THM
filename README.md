@@ -1,5 +1,5 @@
-# GhostCat
-![Logo GhostCat](https://i.imgur.com/fR0jVuM.png)
+# TomGhost
+![Logo TomGhost](https://i.imgur.com/fR0jVuM.png)
 
 #### 1. Compromise this machine and obtain user.txt
 
